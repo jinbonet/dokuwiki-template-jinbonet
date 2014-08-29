@@ -1,0 +1,7 @@
+base     jinbonet
+author   jinbonet
+email    jinbonetwork@gmail.com
+date     2014-08-27
+name     jinbonet
+desc     An arranged DokuWiki template copied from the default.
+url      http://lab.jinbo.net/dokuwiki
