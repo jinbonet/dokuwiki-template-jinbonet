@@ -237,7 +237,12 @@ form.search {
 
 /*____________ breadcrumbs ____________*/
 
-.dokuwiki div.breadcrumbs {
+.traces {
+	clear: both;
+	border-top: 1px solid @ini_border;
+	border-bottom: 1px solid @ini_border;
+}
+.trace {
     font-size: 0.875em;
     clear: both;
 
@@ -250,10 +255,9 @@ form.search {
     	clear: both;
     	content: '';
     }
-    
-    .trace {
-        border-top: 1px solid @ini_border;
-        border-bottom: 1px solid @ini_border;
+}
+#breadcrumb {
+    .wrap {
         
         bdi {
         	display: inline-block;
@@ -269,10 +273,10 @@ form.search {
 	    	display: none;
 	    }
     }
-
-    .youarehere {
-    }
-	
+}
+#youarehere {
+	.wrap {
+	}
 }
 
 #IE7 .dokuwiki div.breadcrumbs div,
@@ -282,7 +286,7 @@ form.search {
 
 /* nav, footer links
 ********************************************************************/
-.breadcrumbs + .nav {
+.traces + .nav {
 	margin-top: 0.5em;
 }
 .nav {

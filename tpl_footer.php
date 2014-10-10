@@ -4,12 +4,9 @@
 			</div><!--/.page.group-->
 			<div class="docInfo">
 <?php
-	$conf['youarehere'] = true;
-	echo '<div class="youarehere">' . PHP_EOL;
-	tpl_youarehere( ' &rsaquo; ' );
-	echo '</div>' . PHP_EOL;
 	if( j_is_user_logged_in() ) {
-		echo ' &mdash; <bdi>' . editorinfo( $INFO['editor'] ) . '</bdi>' . PHP_EOL;
+		tpl_pageinfo();
+		//echo ' &mdash; <bdi>' . editorinfo( $INFO['editor'] ) . '</bdi>' . PHP_EOL;
 	}
 ?>
 			</div><!--/.docInfo-->

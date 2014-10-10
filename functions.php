@@ -31,22 +31,24 @@ function j_build_links($items,$attributes) {
 	}
 }
 
+function j_breadcrumbs($delimiter=' &rsaquo; ') {
+	global $INFO, $conf;
+	$conf['breadcrumbs'] = true;
+	echo '<div id="breadcrumbs" class="trace"><div class="wrap">' . PHP_EOL;
+	tpl_breadcrumbs($delimiter);
+	echo '</div></div><!--/#breadcrumbs-->' . PHP_EOL;
+}
+
+function j_youarehere() {
+	global $INFO, $conf;
+	$conf['youarehere'] = true;
+	echo '<div id="youarehere" class="trace"><div class="wrap">' . PHP_EOL;
+	tpl_youarehere();
+	echo '</div></div><!--/#youarehere-->' . PHP_EOL;
+}
+
 function j_navigation() {
 	global $INFO, $conf;
-	if( $INFO[perm] && j_is_user_logged_in() ) {
-		echo '<div class="breadcrumbs" role="navigation">' . PHP_EOL;
-		echo '<div class="trace">' . PHP_EOL;
-		$conf['breadcrumbs'] = true;
-		tpl_breadcrumbs();
-		echo '</div>' . PHP_EOL;
-		/*
-		echo '<div class="youarehere">' . PHP_EOL;
-		$conf['youarehere'] = true;
-		tpl_youarehere();
-		echo '</div>' . PHP_EOL;
-		*/
-		echo '</div>' . PHP_EOL;
-	}
 	if(page_exists('nav')){
 		$raw = rawWiki('nav');
 		if($raw){
@@ -93,3 +95,4 @@ function j_footer() {
 		}
 	}
 }
+
