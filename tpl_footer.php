@@ -55,7 +55,7 @@
 
 <div id="dokuwiki__footer" role="contentinfo">
 	<div class="pad">
-<?php tpl_include_page( 'footer', 1, 1 ); ?>
+<?php xx_footer(); ?>
 	</div><!--/.pad-->
 </div><!--/#dokuwiki__footer-->
 </div><!--/#dokuwiki__top-->

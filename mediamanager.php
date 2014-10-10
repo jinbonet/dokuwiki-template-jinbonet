@@ -18,7 +18,6 @@ header('X-UA-Compatible: IE=edge,chrome=1');
 <?php
 	echo tpl_favicon(array('favicon', 'mobile'));
 	tpl_metaheaders();
-	require_once dirname(__FILE__).'/tpl_header.meta.php';
  ?>
 	<script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script>
 </head>
