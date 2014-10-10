@@ -1,4 +1,4 @@
-dokuwiki-template-jinbonet
-==========================
+kabinet
+=======
 
-A copy of DokuWiki default template, initiated in 2014.
+A modified DokuWiki template for lab.jinbo.net.
