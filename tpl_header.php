@@ -8,7 +8,7 @@
 <html lang="<?php echo $conf['lang'] ?>" dir="<?php echo $lang['direction'] ?>" class="no-js">
 <head>
 	<meta charset="utf-8" />
-	<title><?php echo XX_TITLE; ?></title>
+	<title><?php echo J_TITLE; ?></title>
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0" />
 	<script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script>
 <?php
@@ -69,7 +69,7 @@
 			</div><!--/#dokuwiki__sitetools-->
 		</div><!--/.tools.group-->
 <?php
-	xx_navigation();
+	j_navigation();
 	html_msgarea();
 ?>
 		<hr class="a11y" />

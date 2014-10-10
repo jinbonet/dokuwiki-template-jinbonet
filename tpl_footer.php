@@ -8,7 +8,7 @@
 	echo '<div class="youarehere">' . PHP_EOL;
 	tpl_youarehere( ' &rsaquo; ' );
 	echo '</div>' . PHP_EOL;
-	if( xx_is_user_logged_in() ) {
+	if( j_is_user_logged_in() ) {
 		echo ' &mdash; <bdi>' . editorinfo( $INFO['editor'] ) . '</bdi>' . PHP_EOL;
 	}
 ?>
@@ -55,7 +55,7 @@
 
 <div id="dokuwiki__footer" role="contentinfo">
 	<div class="pad">
-<?php xx_footer(); ?>
+<?php j_footer(); ?>
 	</div><!--/.pad-->
 </div><!--/#dokuwiki__footer-->
 </div><!--/#dokuwiki__top-->

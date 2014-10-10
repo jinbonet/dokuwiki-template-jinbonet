@@ -1,10 +1,10 @@
 <?php
-function xx_is_user_logged_in() {
+function j_is_user_logged_in() {
 	global $INPUT;
 	return $INPUT->server->bool('REMOTE_USER');
 }
 
-function xx_build_links($items,$attributes) {
+function j_build_links($items,$attributes) {
 	if(!empty($items)&&is_array($items)) {
 		foreach($items as $item) {
 			if(!is_object($item)) {
@@ -31,9 +31,9 @@ function xx_build_links($items,$attributes) {
 	}
 }
 
-function xx_navigation() {
+function j_navigation() {
 	global $INFO, $conf;
-	if( $INFO[perm] && xx_is_user_logged_in() ) {
+	if( $INFO[perm] && j_is_user_logged_in() ) {
 		echo '<div class="breadcrumbs" role="navigation">' . PHP_EOL;
 		echo '<div class="trace">' . PHP_EOL;
 		$conf['breadcrumbs'] = true;
@@ -66,12 +66,12 @@ function xx_navigation() {
 				}
 				$INFO[nav][] = array('id'=>$item,'link'=>$link,'label'=>$label,'icon'=>$icon);
 			}
-			echo xx_build_links($INFO[nav],array('id'=>'nav','role'=>'navigation'));
+			echo j_build_links($INFO[nav],array('id'=>'nav','role'=>'navigation'));
 		}
 	}
 }
 
-function xx_footer() {
+function j_footer() {
 	global $INFO,$conf;
 	if(page_exists('footer')){
 		$raw = rawWiki('footer');
@@ -89,7 +89,7 @@ function xx_footer() {
 				$icon = $icon?"<i class='$icon'></i> ":'';
 				$INFO[footer][] = array('id'=>$item,'link'=>$link,'label'=>$label,'icon'=>$icon);
 			}
-			echo xx_build_links($INFO[footer],array('id'=>'footer','role'=>'navigation'));
+			echo j_build_links($INFO[footer],array('id'=>'footer','role'=>'navigation'));
 		}
 	}
 }
