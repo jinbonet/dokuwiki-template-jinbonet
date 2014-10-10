@@ -1,7 +1,7 @@
-base     jinbonet
-author   jinbonet
+base     kabinet
+author   kabinet
 email    jinbonetwork@gmail.com
 date     2014-08-27
-name     jinbonet
-desc     An arranged DokuWiki template copied from the default.
+name     kabinet
+desc     A modified DokuWiki template for lab.jinbo.net.
 url      http://lab.jinbo.net/dokuwiki/wiki:template
