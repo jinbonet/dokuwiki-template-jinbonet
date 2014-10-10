@@ -63,8 +63,8 @@ function j_navigation() {
 					$label = $label&&$label!=$item?$label:p_get_first_heading(trim($item));
 					$icon = trim($icon);
 					$icon = $icon?"<i class='$icon'></i> ":'';
+					$INFO[nav][] = array('id'=>$item,'link'=>$link,'label'=>$label,'icon'=>$icon);
 				}
-				$INFO[nav][] = array('id'=>$item,'link'=>$link,'label'=>$label,'icon'=>$icon);
 			}
 			echo j_build_links($INFO[nav],array('id'=>'nav','role'=>'navigation'));
 		}
