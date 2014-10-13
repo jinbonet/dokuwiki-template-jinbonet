@@ -246,37 +246,39 @@ form.search {
     font-size: 0.875em;
     clear: both;
 
-    > div {
+    .wrap {
         padding: .1em .35em;
+
+		&:after {
+			display: block;
+			clear: both;
+			content: '';
+		}
+
+		.bchead + .bcsep {
+			display: none;
+		}
     }
     
-    > div:after {
-    	display: block;
-    	clear: both;
-    	content: '';
-    }
 }
+
 #breadcrumb {
     .wrap {
         
-        bdi {
-        	display: inline-block;
-		}
-		
-		bdi:after {
-			content: '·';
-			display: inline;
-			margin: 0 0 0 0.25em;
-		}
-
 	    .bcsep {
-	    	display: none;
 	    }
     }
 }
+
 #youarehere {
 	.wrap {
+		padding: 0;
+
+		.bchead {
+			display: none;
+		}
 	}
+	
 }
 
 #IE7 .dokuwiki div.breadcrumbs div,

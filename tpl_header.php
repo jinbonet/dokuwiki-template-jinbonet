@@ -73,7 +73,6 @@
 	if( $INFO[perm] && j_is_user_logged_in() ) {
 		j_breadcrumbs();
 	}
-	j_youarehere();
 	echo '</div>'.PHP_EOL;
 	j_navigation();
 	html_msgarea();
@@ -102,5 +101,6 @@
 			<!--div class="pageId"><span><?php /* echo hsc($ID); */ ?></span></div-->
 			<div class="page group" role="main">
 <?php
+	j_youarehere();
 	tpl_flush();
 ?>

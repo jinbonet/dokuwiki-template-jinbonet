@@ -31,7 +31,7 @@ function j_build_links($items,$attributes) {
 	}
 }
 
-function j_breadcrumbs($delimiter=' &rsaquo; ') {
+function j_breadcrumbs($delimiter=' &middot; ') {
 	global $INFO, $conf;
 	$conf['breadcrumbs'] = true;
 	echo '<div id="breadcrumbs" class="trace"><div class="wrap">' . PHP_EOL;
@@ -43,7 +43,7 @@ function j_youarehere() {
 	global $INFO, $conf;
 	$conf['youarehere'] = true;
 	echo '<div id="youarehere" class="trace"><div class="wrap">' . PHP_EOL;
-	tpl_youarehere();
+	tpl_youarehere($delimiter=' &rsaquo; ');
 	echo '</div></div><!--/#youarehere-->' . PHP_EOL;
 }
 
