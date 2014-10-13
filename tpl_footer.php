@@ -5,7 +5,7 @@
 			<div class="docInfo">
 <?php
 	if( j_is_user_logged_in() ) {
-		tpl_pageinfo();
+		j_pageinfo();
 		//echo ' &mdash; <bdi>' . editorinfo( $INFO['editor'] ) . '</bdi>' . PHP_EOL;
 	}
 ?>

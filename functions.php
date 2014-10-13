@@ -34,17 +34,27 @@ function j_build_links($items,$attributes) {
 function j_breadcrumbs($delimiter=' &middot; ') {
 	global $INFO, $conf;
 	$conf['breadcrumbs'] = true;
-	echo '<div id="breadcrumbs" class="trace"><div class="wrap">' . PHP_EOL;
+	ob_start();
 	tpl_breadcrumbs($delimiter);
-	echo '</div></div><!--/#breadcrumbs-->' . PHP_EOL;
+	$breadcrumbs = ob_get_contents();
+	ob_end_clean();
+	echo '<div id="breadcrumbs" class="trace"><div class="wrap">'.PHP_EOL
+		.$breadcrumbs.PHP_EOL
+		.'</div></div><!--/#breadcrumbs-->'.PHP_EOL;
 }
 
 function j_youarehere() {
 	global $INFO, $conf;
 	$conf['youarehere'] = true;
-	echo '<div id="youarehere" class="trace"><div class="wrap">' . PHP_EOL;
+	ob_start();
 	tpl_youarehere($delimiter=' &rsaquo; ');
-	echo '</div></div><!--/#youarehere-->' . PHP_EOL;
+	$youarehere = ob_get_contents();
+	ob_end_clean();
+	if(substr_count($youarehere,'</a>')>1) {
+		echo '<div id="youarehere" class="trace"><div class="wrap">'.PHP_EOL
+			.$youarehere.PHP_EOL
+			.'</div></div><!--/#youarehere-->'.PHP_EOL;
+	}
 }
 
 function j_navigation() {
@@ -71,6 +81,25 @@ function j_navigation() {
 			echo j_build_links($INFO[nav],array('id'=>'nav','role'=>'navigation'));
 		}
 	}
+}
+
+function j_pageinfo() {
+	global $INFO,$conf;
+	$page = (object) array(
+		'update_page' => $INFO['id'],
+		'update_time' => $INFO['lastmod'],
+		'update_user' => $INFO['editor'],
+	);
+	$meta = (object) array(
+		'update_page' => $INFO['meta']['last_change']['id'],
+		'update_time' => $INFO['meta']['last_change']['date'],
+		'update_user' => $INFO['meta']['last_change']['user'],
+	);
+	printf(
+		'<p class="pageinfo">Updated at %s by %s</p>',
+		date('Y-m-d',$page->update_time),
+		userlink($page->update_user)
+	);
 }
 
 function j_footer() {
