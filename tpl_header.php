@@ -69,11 +69,9 @@
 			</div><!--/#dokuwiki__sitetools-->
 		</div><!--/.tools.group-->
 <?php
-	echo '<div class="traces">'.PHP_EOL;
 	if( $INFO[perm] && j_is_user_logged_in() ) {
 		j_breadcrumbs();
 	}
-	echo '</div>'.PHP_EOL;
 	j_navigation();
 	html_msgarea();
 ?>

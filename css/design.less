@@ -237,14 +237,9 @@ form.search {
 
 /*____________ breadcrumbs ____________*/
 
-.traces {
-	clear: both;
-	border-top: 1px solid @ini_border;
-	border-bottom: 1px solid @ini_border;
-}
 .trace {
-    font-size: 0.875em;
     clear: both;
+    font-size: 0.875em;
 
     .wrap {
         padding: .1em .35em;
@@ -262,7 +257,11 @@ form.search {
     
 }
 
-#breadcrumb {
+#breadcrumbs {
+	margin-top: 1em;
+	border-top: 1px solid @ini_border;
+	border-bottom: 1px solid @ini_border;
+
     .wrap {
         
 	    .bcsep {
@@ -288,7 +287,7 @@ form.search {
 
 /* nav, footer links
 ********************************************************************/
-.traces + .nav {
+#breadcrumbs + .nav {
 	margin-top: 0.5em;
 }
 .nav {
