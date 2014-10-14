@@ -4,6 +4,27 @@ function j_is_user_logged_in() {
 	return $INPUT->server->bool('REMOTE_USER');
 }
 
+function j_header_title($options=array()){
+	global $conf;
+	$defaults = array(
+		'image' => array(':wiki:logo.png',':logo.png','images/logo.png'),
+		'size' => array(),
+		'title' => $conf['title'],
+	);
+	$filtered1 = array_merge($defaults,$options);
+	$filtered2 = array_intersect_key($defaults,$filtered1);
+	extract($filtered2);
+	$logo = tpl_getMediaFile($image,false,$size);
+	$markup = sprintf('<span class="logo"><img src="%s" %s alt="%s"></span><span class="label"><span>%s</span></span>',$logo,$size[3],$title,$title);
+
+	ob_start();
+	tpl_link(wl(),$markup,'accesskey="h" title="[H]"');
+	$markup = ob_get_contents();
+	ob_end_clean();
+
+	echo $markup;
+}
+
 function j_build_links($items,$attributes) {
 	if(!empty($items)&&is_array($items)) {
 		foreach($items as $item) {
@@ -46,11 +67,12 @@ function j_breadcrumbs($delimiter=' &middot; ') {
 function j_youarehere() {
 	global $INFO, $conf;
 	$conf['youarehere'] = true;
+	$offset = 2;
 	ob_start();
 	tpl_youarehere($delimiter=' &rsaquo; ');
 	$youarehere = ob_get_contents();
 	ob_end_clean();
-	if(substr_count($youarehere,'</a>')>1) {
+	if(substr_count($youarehere,'</a>')>$offset) {
 		echo '<div id="youarehere" class="trace"><div class="wrap">'.PHP_EOL
 			.$youarehere.PHP_EOL
 			.'</div></div><!--/#youarehere-->'.PHP_EOL;

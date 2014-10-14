@@ -26,7 +26,7 @@
 				<li><a href="#dokuwiki__content"><?php echo $lang['skip_to_content']; ?></a></li>
 			</ul>
 			<div class="site-header" role="banner">
-				<h1><?php tpl_link( wl(), '<span>'.$conf['title'].'</span>', 'accesskey="h" title="[H]"' ); ?></h1>
+				<h1><?php j_header_title(); ?></h1>
 <?php if ($conf['tagline']): ?>
 				<p class="claim"><?php echo $conf['tagline']; ?></p>
 <?php endif ?>
