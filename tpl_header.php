@@ -1,14 +1,16 @@
 <?php
-	if( !defined('DOKU_INC') ) die();
-	require_once dirname(__FILE__).'/functions.php';
-	header('X-UA-Compatible: IE=edge,chrome=1');
-	$hasSidebar = page_findnearest($conf['sidebar']);
-	$showSidebar = $hasSidebar && ($ACT=='show');
+if( !defined('DOKU_INC') ) die();
+
+require_once dirname(__FILE__).'/classes/main.php';
+require_once dirname(__FILE__).'/classes/detail.php';
+require_once dirname(__FILE__).'/classes/mediamanager.php';
+
+header('X-UA-Compatible: IE=edge,chrome=1');
 ?><!DOCTYPE html>
-<html lang="<?php echo $conf['lang'] ?>" dir="<?php echo $lang['direction'] ?>" class="no-js">
+<html<?php Kabinet::printHtmlAttributes(); ?>>
 <head>
 	<meta charset="utf-8" />
-	<title><?php echo J_TITLE; ?></title>
+	<title><?php Kabinet::printWindowTitle(); ?></title>
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0" />
 	<script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script>
 <?php
@@ -17,7 +19,7 @@
 ?></head>
 <body>
 <div id="dokuwiki__site">
-<div id="dokuwiki__top" class="site <?php echo tpl_classes() . ( $showSidebar ? 'showSidebar' : '' ) . ( $hasSidebar ? 'hasSidebar' : '' ); ?>">
+<div id="dokuwiki__top" class="<?php Kabinet::printBodyClasses(); ?>">
 
 <div id="dokuwiki__header">
 	<div class="pad group">
@@ -26,7 +28,7 @@
 				<li><a href="#dokuwiki__content"><?php echo $lang['skip_to_content']; ?></a></li>
 			</ul>
 			<div class="site-header" role="banner">
-				<h1><?php j_header_title(); ?></h1>
+				<h1><?php Kabinet::printHeaderTitle(); ?></h1>
 <?php if ($conf['tagline']): ?>
 				<p class="claim"><?php echo $conf['tagline']; ?></p>
 <?php endif ?>
@@ -69,10 +71,10 @@
 			</div><!--/#dokuwiki__sitetools-->
 		</div><!--/.tools.group-->
 <?php
-	if( $INFO[perm] && j_is_user_logged_in() ) {
-		j_breadcrumbs();
+	if( $INFO[perm] && Kabinet::isUser() ) {
+		Kabinet::printBreadcrumbs();
 	}
-	j_navigation();
+	Kabinet::printNavigation();
 	html_msgarea();
 ?>
 		<hr class="a11y" />
@@ -80,7 +82,7 @@
 </div><!--/#dokuwiki__header-->
 <div class="wrapper group">
 
-<?php if($showSidebar): ?>
+<?php if($INFO['showSidebar']): ?>
 	<div id="dokuwiki__aside" role="aside">
 		<div class="pad aside include group">
 			<h3 class="toggle"><?php echo $lang['sidebar'] ?></h3>
@@ -96,9 +98,8 @@
 
 	<div id="dokuwiki__content">
 		<div class="pad group">
-			<!--div class="pageId"><span><?php /* echo hsc($ID); */ ?></span></div-->
 			<div class="page group" role="main">
 <?php
-	j_youarehere();
+	Kabinet::printYouAreHere();
 	tpl_flush();
 ?>

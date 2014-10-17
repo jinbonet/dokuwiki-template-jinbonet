@@ -4,9 +4,8 @@
 			</div><!--/.page.group-->
 			<div class="docInfo">
 <?php
-	if( j_is_user_logged_in() ) {
-		j_pageinfo();
-		//echo ' &mdash; <bdi>' . editorinfo( $INFO['editor'] ) . '</bdi>' . PHP_EOL;
+	if(Kabinet::isUser() ) {
+		Kabinet::printPageInfo();
 	}
 ?>
 			</div><!--/.docInfo-->
@@ -52,7 +51,7 @@
 
 <div id="dokuwiki__footer" role="contentinfo">
 	<div class="pad">
-<?php j_footer(); ?>
+<?php Kabinet::printFooter(); ?>
 	</div><!--/.pad-->
 </div><!--/#dokuwiki__footer-->
 </div><!--/#dokuwiki__top-->
