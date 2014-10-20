@@ -252,7 +252,7 @@ class Kabinet {
 			$markup = ob_get_contents();
 			ob_end_clean();
 
-			// nothing by now
+			// nothing to do, by now.
 		}
 		
 		return $markup;
