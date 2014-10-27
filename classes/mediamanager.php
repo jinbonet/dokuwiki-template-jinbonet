@@ -2,6 +2,7 @@
 class KabinetMediaManager {
 
 	public static function construct() {
+		global $lang;
 		define('TITLE',hsc($lang['mediaselect']));
 	}
 
@@ -37,6 +38,7 @@ class KabinetMediaManager {
 
 	public static function getPageContent() {
 		$markup = false;
+		global $lang;
 
 		$title = '<h1>'.hsc($lang['mediaselect']).'</h1>';
 		$tree = '<div id="media__tree">'.self::getMediaTree().'</div>'.PHP_EOL;

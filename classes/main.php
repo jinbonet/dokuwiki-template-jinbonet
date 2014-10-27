@@ -1,10 +1,6 @@
 <?php
 class Kabinet {
 
-	static $info;
-	static $conf;
-	static $lang;
-	static $act;
 	static $htmlAttributes;
 	static $windowTitle_delimiter;
 	static $headerTitle_imageOrder;
@@ -18,17 +14,12 @@ class Kabinet {
 	public static function construct() {
 		global $INFO,$conf,$lang,$ACT;
 
-		self::$info = &$INFO;
-		self::$conf = &$conf;
-		self::$lang = &$lang;
-		self::$act = &$ACT;
-
-		self::$info['hasSidebar'] = page_findnearest(self::$conf['sidebar']);
-		self::$info['showSidebar'] = self::$info['hasSidebar']&&(self::$act=='show');
+		$INFO['hasSidebar'] = page_findnearest($conf['sidebar']);
+		$INFO['showSidebar'] = $INFO['hasSidebar']&&($ACT=='show');
 
 		self::$htmlAttributes = array(
-			'lang' => self::$conf['lang'],
-			'dir' => self::$lang['direction'],
+			'lang' => $conf['lang'],
+			'dir' => $lang['direction'],
 			'class' => 'no-js',
 		);
 		self::$windowTitle_delimiter = ' | ';
@@ -66,9 +57,13 @@ class Kabinet {
 			foreach($items as $item) {
 				if(!is_object($item)) {
 					$item = (object) $item;
-					$item->icon = $item->icon?"<i class='$item->icon'></i> ":'';
 				}
-				$links[] = sprintf('<li class="%s"><a href="%s">%s%s</a></li>'.PHP_EOL,$item->id,$item->link,$item->icon,$item->label);
+				$item->class = implode(' ',array(
+					'item',
+					'item-type-'.$item->type,
+				));
+				$item->icon = $item->icon?"<i class='$item->icon'></i> ":'';
+				$links[] = sprintf('<li class="%s"><a href="%s">%s%s</a></li>'.PHP_EOL,$item->class,$item->link,$item->icon,$item->label);
 			}
 			$markup .= '<div'.self::buildAttributes($properties).'>'.PHP_EOL;
 			$markup .= '<ul>'.PHP_EOL.implode(PHP_EOL,$links).PHP_EOL.'</ul>'.PHP_EOL;
@@ -78,49 +73,61 @@ class Kabinet {
 		return $markup;
 	}
 
-	function getLinks($content='',$tag='',$properties=array()) {
+	function getLinks($page='',$tag='',$properties=array()) {
 		$markup = false;
-		$properties = !empty($properties)?$properties:array('id'=>$tag,'class'=>'nav','role'=>'navigation');
+		global $INFO,$conf;
+		static $instance;
+		$instance++;
 
-		if($content&&$tag) {
-			if($content){
-				list($garbage,$content) = explode('<code '.$tag.'>',$content);
-				list($content,$garbage) = explode('</code>',$content);
-				$items = array_filter(explode(PHP_EOL,$content),'trim');
-				if(!empty($items)) {
-					self::$info[$tag] = array();
-					foreach($items as $index => $item) {
-						list($item,$attributes) = explode('=>',$item);
-						$item = trim($item);
-						$attributes = array_filter(explode('|',$attributes),'trim');
-						$object = array(
-							'item' => $item,
-							'attributes' => $attributes,
-						);
-						foreach($attributes as $attribute) {
-							list($key,$value) = explode('=',$attribute);
-							$key = trim($key);
-							$value = trim($value);
-							$object[$key] = $value;
-						}
-						if(!isset($object['type'])) {
-							$object['type'] = page_exists($item)&&auth_quickaclcheck($item)?'page':'link';
-						}
-						switch($object['type']) {
-							case 'page':
-								$object['link'] = isset($object['link'])?$object['link']:wl($item);
-								$object['label'] = isset($object['label'])?$object['label']:self::$conf['useheading']==1?p_get_first_heading($item):$item;
-								break;
-							default: // link
-								$object['link'] = isset($object['link'])?$object['link']:'#'.$item;
-								$object['label'] = isset($object['label'])?$object['label']:$item;
-								break;
-						}
-						self::$info[$tag][$index] = $object; 
-					}
-					$markup = self::buildLinks(self::$info[$tag],$properties);
+		if(!page_exists($page)) {
+			return $markup;
+		}
+
+		$tag = $tag?$tag:$page;
+		$properties = !empty($properties)?$properties:array('id'=>"navigation-custom-{$tag}-{$instance}",'class'=>"navigation-custom navigation-{$tag}",'role'=>'navigation');
+		$INFO['navigation-custom'][$page] = array(
+			'tag' => $tag,
+			'properties' => $properties,
+			'items' => array(),
+		);
+
+		$content = rawWiki($page);
+		list($garbage,$content) = explode('<code '.$tag.'>',$content);
+		list($content,$garbage) = explode('</code>',$content);
+		$items = array_filter(explode(PHP_EOL,$content),'trim');
+
+		if(!empty($items)) {
+			foreach($items as $index => $item) {
+				list($item,$attributes) = explode('=>',$item);
+				$item = trim($item);
+				$attributes = array_filter(explode('|',$attributes),'trim');
+				$object = array(
+					'item' => $item,
+					'attributes' => $attributes,
+					'type' => page_exists($item)?'page':'link',
+				);
+				foreach($attributes as $attribute) {
+					list($key,$value) = explode('=',$attribute);
+					$key = trim($key);
+					$value = trim($value);
+					$object[$key] = $value;
 				}
+				if($object['type']=='page'&&!auth_quickaclcheck($item)) {
+					continue;
+				}
+				switch($object['type']) {
+					case 'page':
+						$object['link'] = isset($object['link'])?$object['link']:wl($item);
+						$object['label'] = isset($object['label'])?$object['label']:($conf['useheading']==1?p_get_first_heading($item):$item);
+						break;
+					default: // link
+						$object['link'] = isset($object['link'])?$object['link']:'#'.$item;
+						$object['label'] = isset($object['label'])?$object['label']:$item;
+						break;
+				}
+				$INFO['navigation-custom'][$page]['items'][$index] = $object; 
 			}
+			$markup = self::buildLinks($INFO['navigation-custom'][$page]['items'],$properties);
 		}
 
 		return $markup;
@@ -262,10 +269,7 @@ class Kabinet {
 		$markup = false;
 		global $INFO, $conf;
 
-		if(page_exists('nav')){
-			$content = rawWiki('nav');
-			$markup = self::getLinks($content,'nav');
-		}
+		$markup = self::getLinks('nav');
 
 		return $markup;
 	}
@@ -324,10 +328,7 @@ class Kabinet {
 		$markup = false;
 		global $INFO,$conf;
 
-		if(page_exists('footer')){
-			$content = rawWiki('footer');
-			$markup = self::getLinks($content,'footer');
-		}
+		$markup = self::getLinks('footer');
 
 		return $markup;
 	}
