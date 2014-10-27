@@ -36,6 +36,21 @@ class Kabinet {
 	//	Utilities
 	//-----------------------------------------------------------------------------
 
+	function sanitize($string='') {
+		$pattern = array(
+			' ' => '-',
+			':' => '_',
+			'&' => '',
+			';' => '',
+			'.' => '',
+			'#' => '',
+		);
+		$string = htmlentities($string);
+		$string = str_replace(array_keys($pattern),array_values($pattern),$string);
+
+		return $string;
+	}
+
 	function buildAttributes($attributes=array()) {
 		$markup = false;
 
@@ -60,6 +75,7 @@ class Kabinet {
 				}
 				$item->class = implode(' ',array(
 					'item',
+					'item-id-'.self::sanitize($item->item),
 					'item-type-'.$item->type,
 				));
 				$item->icon = $item->icon?"<i class='$item->icon'></i> ":'';
