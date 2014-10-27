@@ -75,8 +75,8 @@ class Kabinet {
 				}
 				$item->class = implode(' ',array(
 					'item',
-					'item-id-'.self::sanitize($item->item),
-					'item-type-'.$item->type,
+					'item-id_'.self::sanitize($item->item),
+					'item-type_'.$item->type,
 				));
 				$item->icon = $item->icon?"<i class='$item->icon'></i> ":'';
 				$links[] = sprintf('<li class="%s"><a href="%s">%s%s</a></li>'.PHP_EOL,$item->class,$item->link,$item->icon,$item->label);
@@ -193,21 +193,24 @@ class Kabinet {
 		echo self::getWindowTitle($title);
 	}
 
-	public static function getBodyClasses($class=array()) {
-		$classes = false;
+	public static function getBodyClasses($classes=array()) {
+		$class = false;
 		global $INFO;
-		$class[] = 'site';
-		$class[] = preg_replace('/[[:cntrl:][:blank:][:punct:]]/','_',$INFO['id']);
-		$class[] = $INFO['showSidebar']?'showSidebar':'';
-		$class[] = $INFO['hasSidebar']?'hasSidebar':'';
+		$classes[] = 'site';
+		$classes[] = 'id_'.self::sanitize($INFO['id']);
+		$classes[] = $INFO['showSidebar']?'showSidebar':'';
+		$classes[] = $INFO['hasSidebar']?'hasSidebar':'';
 
 		ob_start();
 		echo tpl_classes();
-		$classes = ob_get_contents();
+		$classes = array_merge($classes,explode(' ',ob_get_contents()));
 		ob_end_clean();
 
-		$classes = implode(' ',$class).' '.$classes;
-		return $classes;
+		$classes = array_filter($classes,'trim');
+		$classes = array_unique($classes);
+		$class = implode(' ',$classes);
+
+		return $class;
 	}
 
 	public static function printBodyClasses($class=array()) {
