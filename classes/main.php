@@ -304,8 +304,8 @@ class Kabinet {
 		tpl_toc();
 		$toc = ob_get_contents();
 		ob_clean();
-		tpl_content();
-		$content = ob_get_contents(false);
+		tpl_content(false);
+		$content = ob_get_contents();
 		ob_end_clean();
 		
 		$markup = '<div class="content-block content-block-content">'.$content.'</div>'.PHP_EOL;
