@@ -58,7 +58,7 @@ class Kabinet {
 		return $markup;
 	}
 
-	function buildLinks($items=array(),$attributes=array()) {
+	function buildLinks($items=array(),$properties=array()) {
 		$markup = false;
 
 		if(!empty($items)) {
@@ -66,12 +66,61 @@ class Kabinet {
 			foreach($items as $item) {
 				if(!is_object($item)) {
 					$item = (object) $item;
+					$item->icon = $item->icon?"<i class='$item->icon'></i> ":'';
 				}
 				$links[] = sprintf('<li class="%s"><a href="%s">%s%s</a></li>'.PHP_EOL,$item->id,$item->link,$item->icon,$item->label);
 			}
-			$markup .= '<div'.self::buildAttributes($attributes).'>'.PHP_EOL;
+			$markup .= '<div'.self::buildAttributes($properties).'>'.PHP_EOL;
 			$markup .= '<ul>'.PHP_EOL.implode(PHP_EOL,$links).PHP_EOL.'</ul>'.PHP_EOL;
 			$markup .= '</div>'.PHP_EOL;
+		}
+
+		return $markup;
+	}
+
+	function getLinks($content='',$tag='',$properties=array()) {
+		$markup = false;
+		$properties = !empty($properties)?$properties:array('id'=>$tag,'class'=>'nav','role'=>'navigation');
+
+		if($content&&$tag) {
+			if($content){
+				list($garbage,$content) = explode('<code '.$tag.'>',$content);
+				list($content,$garbage) = explode('</code>',$content);
+				$items = array_filter(explode(PHP_EOL,$content),'trim');
+				if(!empty($items)) {
+					self::$info[$tag] = array();
+					foreach($items as $index => $item) {
+						list($item,$attributes) = explode('=>',$item);
+						$item = trim($item);
+						$attributes = array_filter(explode('|',$attributes),'trim');
+						$object = array(
+							'item' => $item,
+							'attributes' => $attributes,
+						);
+						foreach($attributes as $attribute) {
+							list($key,$value) = explode('=',$attribute);
+							$key = trim($key);
+							$value = trim($value);
+							$object[$key] = $value;
+						}
+						if(!isset($object['type'])) {
+							$object['type'] = page_exists($item)&&auth_quickaclcheck($item)?'page':'link';
+						}
+						switch($object['type']) {
+							case 'page':
+								$object['link'] = isset($object['link'])?$object['link']:wl($item);
+								$object['label'] = isset($object['label'])?$object['label']:self::$conf['useheading']==1?p_get_first_heading($item):$item;
+								break;
+							default: // link
+								$object['link'] = isset($object['link'])?$object['link']:'#'.$item;
+								$object['label'] = isset($object['label'])?$object['label']:$item;
+								break;
+						}
+						self::$info[$tag][$index] = $object; 
+					}
+					$markup = self::buildLinks(self::$info[$tag],$properties);
+				}
+			}
 		}
 
 		return $markup;
@@ -212,28 +261,12 @@ class Kabinet {
 	public static function getNavigation() {
 		$markup = false;
 		global $INFO, $conf;
+
 		if(page_exists('nav')){
-			$raw = rawWiki('nav');
-			if($raw){
-				list($garbage,$raw) = explode('<nav>',$raw);
-				list($raw,$garbage) = explode('</nav>',$raw);
-				$items = array_filter(explode(PHP_EOL,$raw),'trim');
-				foreach( $items as $item ) {
-					list($item,$attributes) = explode('=',$item);
-					$item = trim($item);
-					if(page_exists($item)&&auth_quickaclcheck($item)) {
-						$link = wl($item);
-						list($label,$icon) = explode('|',$attributes);
-						$label = trim($label);
-						$label = $label&&$label!=$item?$label:p_get_first_heading(trim($item));
-						$icon = trim($icon);
-						$icon = $icon?"<i class='$icon'></i> ":'';
-						$INFO[nav][] = array('id'=>$item,'link'=>$link,'label'=>$label,'icon'=>$icon);
-					}
-				}
-				$markup = self::buildLinks($INFO[nav],array('id'=>'nav','class'=>'nav','role'=>'navigation'));
-			}
+			$content = rawWiki('nav');
+			$markup = self::getLinks($content,'nav');
 		}
+
 		return $markup;
 	}
 
@@ -290,25 +323,12 @@ class Kabinet {
 	public static function getFooter() {
 		$markup = false;
 		global $INFO,$conf;
+
 		if(page_exists('footer')){
-			$raw = rawWiki('footer');
-			if($raw){
-				list($garbage,$raw) = explode('<footer>',$raw);
-				list($raw,$garbage) = explode('</footer>',$raw);
-				$items = array_filter(explode(PHP_EOL,$raw),'trim');
-				foreach( $items as $item ) {
-					list($item,$attributes) = explode('=',$item);
-					list($link,$label,$icon) = explode('|',$attributes);
-					$itme = trim($item);
-					$link = trim($link);
-					$label = trim($label);
-					$icon = trim($icon);
-					$icon = $icon?"<i class='$icon'></i> ":'';
-					$INFO[footer][] = array('id'=>$item,'link'=>$link,'label'=>$label,'icon'=>$icon);
-				}
-				$markup = self::buildLinks($INFO[footer],array('id'=>'footer','class'=>'nav','role'=>'aside'));
-			}
+			$content = rawWiki('footer');
+			$markup = self::getLinks($content,'footer');
 		}
+
 		return $markup;
 	}
 
