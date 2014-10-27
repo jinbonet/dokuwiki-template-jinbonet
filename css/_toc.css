@@ -7,16 +7,20 @@
 ********************************************************************/
 
 /* toc container */
-#dw__toc {
+.content-block-toc {
     float: right;
     margin: 0 0 1.4em 1.4em;
     width: 12em;
     background-color: @ini_background_alt;
     color: inherit;
-}
-[dir=rtl] #dw__toc {
-    float: left;
-    margin: 0 1.4em 1.4em 0;
+    
+    [dir=rtl] & {
+        float: left;
+        margin: 0 1.4em 1.4em 0;
+    }
+    
+    #dw__toc {
+    }
 }
 
 /*____________ toc header ____________*/
