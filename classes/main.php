@@ -300,17 +300,17 @@ class Kabinet {
 	public static function getPageContent() {
 		$markup = false;
 
-		if(KabinetImage::$img) {
-			$markup = Kabinet::getPageContent();
-		} else {
-			ob_start();
-			tpl_content();
-			$markup = ob_get_contents();
-			ob_end_clean();
-
-			// nothing to do, by now.
-		}
+		ob_start();
+		tpl_toc();
+		$toc = ob_get_contents();
+		ob_clean();
+		tpl_content();
+		$content = ob_get_contents(false);
+		ob_end_clean();
 		
+		$markup = '<div class="content-block content-block-content">'.$content.'</div>'.PHP_EOL;
+		$markup = ($toc?'<div class="content-block content-block-toc">'.$toc.'</div>'.PHP_EOL:'').$markup;
+
 		return $markup;
 	}
 
