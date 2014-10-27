@@ -76,26 +76,32 @@
 }
 
 /* toc */
-#dw__toc {
+.content-block-toc {
     float: none;
     margin: 0 0 1em 0;
     width: auto;
     border-left-width: 0;
     border-bottom: 1px solid @ini_border;
-}
-[dir=rtl] #dw__toc {
-    float: none;
-    margin: 0 0 1em 0;
-    border-right-width: 0;
+    
+    [dir=rtl] & {
+        float: none;
+        margin: 0 0 1em 0;
+        border-right-width: 0;
+    }
+
+    h3.toggle {
+        padding: 0 .5em .5em 0;
+    }
+
+    div.content {
+        padding: .2em 0 .5em;
+    }
 }
 
-.dokuwiki h3.toggle {
-    padding: 0 .5em .5em 0;
-}
-#dw__toc > div,
 #dokuwiki__aside div.content {
-    padding: .2em 0 .5em;
+    .content-block-toc .content
 }
+
 
 /* page */
 .dokuwiki div.page {
