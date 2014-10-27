@@ -286,12 +286,12 @@
     border-left: 1px solid @ini_border;
     background: @ini_background;
     color: inherit;
-}
 
-[dir=rtl] #dw__toc {
-    margin: -1.556em 1.4em .5em -2em;
-    border-left-width: 0;
-    border-right: 1px solid @ini_border;
+    [dir=rtl] & {
+        margin: -1.556em 1.4em .5em -2em;
+        border-left-width: 0;
+        border-right: 1px solid @ini_border;
+    }
 }
 
 .dokuwiki h3.toggle {
